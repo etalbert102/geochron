@@ -18,7 +18,7 @@ Geotime does not require any of the below dependencies to function, however main
 
 ### Overview
 
-Geotime enables various ways of displaying and implementing geo-spatial-temporal data
+Geotime enables various ways of displaying and structuring geo-spatial-temporal data
 
 The methods currently supported are:
 * time cubes
