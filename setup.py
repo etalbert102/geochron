@@ -3,7 +3,7 @@ import os
 import re
 import setuptools
 
-ver_file = f'geotime{os.sep}_version.py'
+ver_file = f'geochron{os.sep}_version.py'
 __version__ = None
 
 # Pull package version number from _version.py
@@ -32,17 +32,17 @@ setuptools.setup(
     description="A companion package to geostructures enabling geo-spatial-temporal data structures.",
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url="https://github.com/etalbert/geotime",
+    url="https://github.com/etalbert/geochron",
     packages=setuptools.find_packages(
-        include=('geotime*', ),
+        include=('geochron*', ),
         exclude=('*tests', 'tests*')
     ),
-    package_data={"geotime": ["py.typed"]},
+    package_data={"geochron": ["py.typed"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent"
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.8',
     install_requires=[
         'numpy>=1,<2',
     ],
