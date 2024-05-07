@@ -1,11 +1,38 @@
 import itertools
 import networkx as nx
-import os
-import matplotlib
-matplotlib.use('Qt5Agg')
-from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
+
+def hash_tracks_into_netdf(track_list , timestamps, hash_func):
+    """
+    Converts a list of tracks into a pandas dataframe using
+    a specified hashing function with intervals reflected
+    in a corresponding timestamp list 
+    
+    Args:
+        track_list: a list of tracks broken down by equal intervals
+
+        timestamps: a list of corresponding timestamps
+
+        hash_func: the hashing function
+
+    Returns:
+        A pandas dataframe
+    """
+    interval_start = track_list[0].start
+    master_hashmap = {}
+    for track,timestamp  in zip(track_list, timestamps):
+        hashmap = hash_func(track)
+        start_string= interval_start.strftime("%Y-%m-%d %H:%M:%S")
+        end_string= timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        interval = start_string + ", " + end_string
+        hashmap = {key: interval for key in hashmap}
+        interval_start = timestamp
+        master_hashmap.update(hashmap)
+
+    df = pd.DataFrame(list(master_hashmap.items()), columns=['cell', 'time'])
+    return df
+
 
 
 def chronnet_create(df, self_loops= True, mode="directed"):
@@ -44,8 +71,3 @@ def chronnet_create(df, self_loops= True, mode="directed"):
     return net
 
 
-df_network = pd.DataFrame()
-df_network['time'] = list(range(20))
-df_network['cell'] = list(range(20))
-net = chronnet_create(df_network)
-nx.draw(net)
