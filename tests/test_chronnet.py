@@ -41,7 +41,7 @@ def test_chronnet_create():
 
     test_df = pd.DataFrame(test_dict)
 
-    test_network = chronnet_create(test_df)
+    test_network = chronnet_create(test_df, True, "directed")
 
     assert list(test_network)[0] == '8a194ad3056ffff'
 
@@ -55,6 +55,6 @@ def test_convert_chronnet():
     ]
     )
 
-    test_chronnet = convert_chronnet(track, 1, hasher.hash_collection)
+    test_chronnet = convert_chronnet(track, 1, hasher.hash_collection, True, "directed")
 
     assert list(test_chronnet)[0] == '8a194ad3056ffff'

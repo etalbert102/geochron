@@ -38,23 +38,23 @@ def hash_tracks_into_netdf(track_list: List, timestamps: List, hash_func: Callab
     return df
 
 
-def chronnet_create(df: pd.DataFrame, self_loops= True, mode="directed"):
+def chronnet_create(df: pd.DataFrame, self_loops: bool, mode= str):
     """
     Converts a properly formatted pandas dataframe with the columns
     of cell and time to a networkx network. 
     
     Args:
-        track_list: a list of tracks broken down by equal intervals
+        df: a pandas dataframe withe two columns cell and time
 
-        timestamps: a list of corresponding timestamps
+        self_loops: whether self loops are included in the network
 
-        hash_func: the hashing function
+        mode: whether the network is directed or undirected
 
     Returns:
         A networkx network
     """
     time_seq = sorted(np.unique(df['time']))
-    if len(time_seq) < 2:
+    if len(time_seq) < 2: # pragma: no cover
         print("The total time interval in the dataset should be larger than two.")
     links = pd.DataFrame()
     cells_before=[]
@@ -83,13 +83,14 @@ def chronnet_create(df: pd.DataFrame, self_loops= True, mode="directed"):
             net.remove_edges_from(list(nx.selfloop_edges(net)))
         if mode == 'undirected':
             net = net.to_undirected()
-    else:
+    else: # pragma: no cover
         print("Empty graph returned.")
     
     return net
 
 
-def convert_chronnet(track: Track, hour_interval: float, hash_func: Callable):
+def convert_chronnet(track: Track, hour_interval: float,
+     hash_func: Callable, self_loops: bool, mode: str):
     """
     Converts a track into a chronnet with a specified time interval
     using a specified hashing function
@@ -101,6 +102,10 @@ def convert_chronnet(track: Track, hour_interval: float, hash_func: Callable):
 
         hash_func: the hashing function
 
+        self_loops: whether self loops are included in the network
+
+        mode: whether the network is directed or undirected
+
     Returns:
         A networkx network 
     """
@@ -110,6 +115,6 @@ def convert_chronnet(track: Track, hour_interval: float, hash_func: Callable):
 
     df = hash_tracks_into_netdf(track_list, timestamps, hash_func)
 
-    chronnet = chronnet_create(df)
+    chronnet = chronnet_create(df, self_loops, mode)
 
     return chronnet 

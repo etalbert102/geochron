@@ -24,7 +24,12 @@ def convert(fcol: FeatureCollection, datastructure: str,
     Keyword Args:
         hash_func: (Callable) (Default H3 hasher)
             The hashing function that is used
-
+        self_loop: (bool) (Default True)
+            Applies to chronnets only whether self loops
+            are included
+        mode: (str) (Default directed)
+            Applies to chronnets only whether network is
+            directed or not
 
     Returns:
         Desired geotime representation
@@ -35,9 +40,11 @@ def convert(fcol: FeatureCollection, datastructure: str,
     if datastructure == "timehex":
         result = convert_timehex(track, hour_interval, hashing_function)
     elif datastructure == "chronnet":
-        result = convert_chronnet(track, hour_interval, hashing_function)
-    else:
-        print("Data structure not currently supported please check doc string for supported options")
+        self_loop = kwargs.get('self_loop', True)
+        mode = kwargs.get('mode', "directed")
+        result = convert_chronnet(track, hour_interval, hashing_function, self_loop, mode)
+    else: # pragma: no cover
+        print("Data structure not currently supported please check doc string for supported options") 
 
     return result
 
