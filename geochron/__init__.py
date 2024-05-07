@@ -6,6 +6,7 @@ from geochron.convert import convert
 
 ConditionalPackageInterceptor.permit_packages(
     {
+        'networkx': 'networkx>=3.0,<4.0',
         'plotly': 'plotly>=5,<6',
     }
 )

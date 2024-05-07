@@ -25,7 +25,7 @@ with open("./README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="geotime",
+    name="geochron",
     version=__version__,
     author="Eli Talbert",
     author_email="",
@@ -44,6 +44,9 @@ setuptools.setup(
     ],
     python_requires='>=3.8',
     install_requires=[
-        'numpy>=1,<2',
+        'geostructures>= 0.8.1, <1.0',
+        'h3>=3.7,<4', 
+        'numpy>=1,<2',  
+        'pandas>=2,<3'
     ],
 )
