@@ -2,11 +2,14 @@ import itertools
 import networkx as nx
 import numpy as np
 import pandas as pd
+from geostructures.collections import  Track
+from typing import Callable, List
+from geochron.time_slicing import get_timestamp_intervals, time_slice_track 
 
-def hash_tracks_into_netdf(track_list , timestamps, hash_func):
+def hash_tracks_into_netdf(track_list: List, timestamps: List, hash_func: Callable):
     """
-    Converts a list of tracks into a pandas dataframe using
-    a specified hashing function with intervals reflected
+    Converts a list of tracks into a pandas dataframe suitable for chron net creation
+    using a specified hashing function with intervals reflected
     in a corresponding timestamp list 
     
     Args:
@@ -31,11 +34,25 @@ def hash_tracks_into_netdf(track_list , timestamps, hash_func):
         master_hashmap.update(hashmap)
 
     df = pd.DataFrame(list(master_hashmap.items()), columns=['cell', 'time'])
+    
     return df
 
 
+def chronnet_create(df: pd.DataFrame, self_loops= True, mode="directed"):
+    """
+    Converts a properly formatted pandas dataframe with the columns
+    of cell and time to a networkx network. 
+    
+    Args:
+        track_list: a list of tracks broken down by equal intervals
 
-def chronnet_create(df, self_loops= True, mode="directed"):
+        timestamps: a list of corresponding timestamps
+
+        hash_func: the hashing function
+
+    Returns:
+        A networkx network
+    """
     time_seq = sorted(np.unique(df['time']))
     if len(time_seq) < 2:
         print("The total time interval in the dataset should be larger than two.")
@@ -68,6 +85,31 @@ def chronnet_create(df, self_loops= True, mode="directed"):
             net = net.to_undirected()
     else:
         print("Empty graph returned.")
+    
     return net
 
 
+def convert_chronnet(track: Track, hour_interval: float, hash_func: Callable):
+    """
+    Converts a track into a chronnet with a specified time interval
+    using a specified hashing function
+    
+    Args:
+        track: the target geostructures Track 
+
+        hour_interval: the length in hours of the desired interval
+
+        hash_func: the hashing function
+
+    Returns:
+        A networkx network 
+    """
+    timestamps = get_timestamp_intervals(track, hour_interval)
+
+    track_list = time_slice_track(track, timestamps)
+
+    df = hash_tracks_into_netdf(track_list, timestamps, hash_func)
+
+    chronnet = chronnet_create(df)
+
+    return chronnet 
