@@ -1,3 +1,4 @@
+"""Init"""
 import sys
 
 from geochron._version import __version__  # noqa: F401

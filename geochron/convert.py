@@ -5,7 +5,7 @@ from geochron.chronnet import convert_chronnet
 from geochron.timehex import convert_timehex
 
 
-def convert(fcol: FeatureCollection, datastructure: str, 
+def convert(fcol: FeatureCollection, datastructure: str,
             hour_interval: float, res= int(10), **kwargs):
     """
     Converts a geostructures FeatureCollection to a desired geotime datastructure
@@ -44,7 +44,6 @@ def convert(fcol: FeatureCollection, datastructure: str,
         mode = kwargs.get('mode', "directed")
         result = convert_chronnet(track, hour_interval, hashing_function, self_loop, mode)
     else: # pragma: no cover
-        print("Data structure not currently supported please check doc string for supported options") 
+        print("Data structure not supported please check doc string for supported options")
 
     return result
-

@@ -1,8 +1,9 @@
 """ Representation as time hexes """
-from geostructures.collections import Track
-from geochron.time_slicing import get_timestamp_intervals, time_slice_track
 from typing import Callable, List
 import pandas as pd
+from geostructures.collections import Track
+from geochron.time_slicing import get_timestamp_intervals, time_slice_track
+
 
 
 
@@ -33,13 +34,15 @@ def hash_tracks_into_timehexdf(track_list: List, timestamps: List, hash_func: Ca
         new_row = pd.Series(data=hashmap, name=interval)
         row_list.append(new_row)
         interval_start = timestamp
-    
+
     df = pd.DataFrame(row_list)
-    
+
     df = df.reset_index(names='interval')
 
-    df[['start_time', 'end_time']] = df['interval'].str.split(',', expand=True)
-    
+    split_df = df['interval'].str.split(',', expand=True)# pylint: disable=unsubscriptable-object
+    df.loc[:, 'start_time'] = split_df[0]
+    df.loc[:, 'end_time'] = split_df[1]
+
     return df
 
 def convert_timehex(track: Track, hour_interval: float, hash_func: Callable):
@@ -63,5 +66,5 @@ def convert_timehex(track: Track, hour_interval: float, hash_func: Callable):
 
     timehex_df = hash_tracks_into_timehexdf(track_list, timestamps, hash_func)
 
-    
+
     return timehex_df

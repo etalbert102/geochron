@@ -1,10 +1,13 @@
+""" Representation as chronnets """
 import itertools
+from typing import Callable, List
 import networkx as nx
 import numpy as np
 import pandas as pd
+
 from geostructures.collections import  Track
-from typing import Callable, List
-from geochron.time_slicing import get_timestamp_intervals, time_slice_track 
+from geochron.time_slicing import get_timestamp_intervals, time_slice_track
+
 
 def hash_tracks_into_netdf(track_list: List, timestamps: List, hash_func: Callable):
     """
@@ -26,19 +29,19 @@ def hash_tracks_into_netdf(track_list: List, timestamps: List, hash_func: Callab
     master_list = []
     for track,timestamp  in zip(track_list, timestamps):
         hashmap = hash_func(track)
-        start_string= interval_start.strftime("%Y-%m-%d %H:%M:%S")
-        end_string= timestamp.strftime("%Y-%m-%d %H:%M:%S")
-        interval = start_string + ", " + end_string
+        begin_string= interval_start.strftime("%Y-%m-%d %H:%M:%S")
+        ending_string= timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        interval = begin_string + ", " + ending_string
         hexes = list(hashmap.keys())
         counts = list(hashmap.values())
         hex_list = [element for element, count in zip(hexes, counts) for _ in range(count)]
         tuples_list = [(item, interval) for item in hex_list]
         master_list += tuples_list
         interval_start = timestamp
-        
+
 
     df = pd.DataFrame(master_list, columns=['cell', 'time'])
-    
+
     return df
 
 
@@ -83,13 +86,13 @@ def chronnet_create(df: pd.DataFrame, self_loops: bool, mode= str):
         for index, rows in links.iterrows():
             edgelist.append(tuple([rows['from'], rows['to'], rows['weight']]))
         net.add_weighted_edges_from(edgelist)
-        if self_loops == False:
+        if self_loops is False:
             net.remove_edges_from(list(nx.selfloop_edges(net)))
         if mode == 'undirected':
             net = net.to_undirected()
     else: # pragma: no cover
         print("Empty graph returned.")
-    
+
     return net
 
 
@@ -121,4 +124,4 @@ def convert_chronnet(track: Track, hour_interval: float,
 
     chronnet = chronnet_create(df, self_loops, mode)
 
-    return chronnet 
+    return chronnet

@@ -1,7 +1,8 @@
 """ Functions needed to slice tracks by time"""
-from geostructures.collections import  Track
 from datetime import  timedelta
 from typing import List
+from geostructures.collections import  Track
+
 
 
 def get_timestamp_intervals(track: Track, hour_interval: float):
@@ -26,11 +27,11 @@ def get_timestamp_intervals(track: Track, hour_interval: float):
     while date_x < end_time:
         date_x += timedelta(hours = hour_interval)
         timestamps.append(date_x)
-    
-    # change the last value to be inclusive 
+
+    # change the last value to be inclusive
     timestamps[-1] = timestamps[-1] + timedelta(seconds=1)
-    
-    
+
+
     return timestamps
 
 
@@ -50,10 +51,10 @@ def time_slice_track(track: Track, timestamps: List):
     start_time = track.start
     sliced_tracks = []
 
-    
+
     for timestamp in timestamps:
         sliced_track = track[start_time: timestamp]
         start_time = timestamp
         sliced_tracks.append(sliced_track)
-    
+
     return sliced_tracks
