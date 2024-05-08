@@ -1,7 +1,7 @@
 """ Representation as chronnets """
 import itertools
 from typing import Callable, List
-import networkx as nx
+import networkx as nx # type: ignore
 import numpy as np
 import pandas as pd
 
@@ -78,7 +78,7 @@ def chronnet_create(df: pd.DataFrame, self_loops: bool, mode= str):
     links['to'] = cells_after
     links['weight'] = weights
     links = links.sort_values(by=['from', 'to']).reset_index().drop(columns = ['index'])
-    links = links.groupby(['from', 'to'], as_index=False)['weight'].sum()
+    links = links.groupby(['from', 'to'], as_index=False)['weight'].sum().reset_index()
     net = nx.DiGraph()
     if len(links) !=0:
         net.add_nodes_from(np.unique(df['cell']))
