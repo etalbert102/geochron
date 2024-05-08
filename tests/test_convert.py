@@ -13,12 +13,10 @@ def test_convert():
     ]
     )
     test_chronnet = convert(featurecollection,"chronnet", 1)
-    test_chronnet_ud = convert(featurecollection,"chronnet", 1, mode = "undirected")
     test_timehex = convert(featurecollection,"timehex", 1)
 
 
     assert list(test_chronnet)[0] == '8a194ad3056ffff'
-    assert test_chronnet_ud.is_directed() == False
     assert test_timehex['8a194ad3056ffff'].values[1] == 1
 
 

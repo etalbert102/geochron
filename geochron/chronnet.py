@@ -23,17 +23,21 @@ def hash_tracks_into_netdf(track_list: List, timestamps: List, hash_func: Callab
         A pandas dataframe
     """
     interval_start = track_list[0].start
-    master_hashmap = {}
+    master_list = []
     for track,timestamp  in zip(track_list, timestamps):
         hashmap = hash_func(track)
         start_string= interval_start.strftime("%Y-%m-%d %H:%M:%S")
         end_string= timestamp.strftime("%Y-%m-%d %H:%M:%S")
         interval = start_string + ", " + end_string
-        hashmap = {key: interval for key in hashmap}
+        hexes = list(hashmap.keys())
+        counts = list(hashmap.values())
+        hex_list = [element for element, count in zip(hexes, counts) for _ in range(count)]
+        tuples_list = [(item, interval) for item in hex_list]
+        master_list += tuples_list
         interval_start = timestamp
-        master_hashmap.update(hashmap)
+        
 
-    df = pd.DataFrame(list(master_hashmap.items()), columns=['cell', 'time'])
+    df = pd.DataFrame(master_list, columns=['cell', 'time'])
     
     return df
 
