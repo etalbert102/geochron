@@ -1,4 +1,4 @@
-# Geotime
+# Geochron
 
 
 A companion package to geostructures (https://github.com/ccbest/geostructures) enabling geo-spatial-temporal data structures
