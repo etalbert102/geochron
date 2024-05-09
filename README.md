@@ -13,8 +13,9 @@ $ pip install geotime
 ```
 
 #### Optional Dependencies
-Geotime does not require any of the below dependencies to function, however maintains optional features that use:
-* plotly
+Geotime does not require any of the below dependencies to function, however some functionality uses:
+* plotly (visualization)
+* networkx (chron-nets)
 
 ### Overview
 
@@ -35,7 +36,7 @@ For an interactive introduction, please review our collection of [Jupyter notebo
 
 ### Reporting Issues / Requesting Features
 
-The Geostructures team uses Github issues to track development goals. Please include as much detail as possible so we can effectively triage your request.
+The Geochron team uses Github issues to track development goals. Please include as much detail as possible so we can effectively triage your request.
 
 ### Contributing
 
