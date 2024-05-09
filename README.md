@@ -22,15 +22,25 @@ Geotime does not require any of the below dependencies to function, however some
 Geotime enables various ways of displaying and structuring geo-spatial-temporal data
 
 The methods currently supported are:
-* time hexes
+* time hexes H3 Geohashes with second dimension time (Original Niemeyer can also be used)
 * chron-nets (https://www.nature.com/articles/s41467-020-17634-2)
 
 
+#### Basic Functionality
+The primary and simplest use case is converting a geostructures FeatureCollection to another datastructure.
+Geostructures FeatureCollections can convert most major 
+```python
+from geochron import convert
+
+desired_output = convert(fcol=Feature_Collection_of_time_shapes, datastructure= "timehex",
+hour_interval= 1, res= 10)
+
+```
 
 
-## Quick Start
+## More Information
 
-For an interactive introduction, please review our collection of [Jupyter notebooks](./notebooks).
+For an more in-depth introduction, please review our collection of [Jupyter notebooks](./notebooks).
 
 
 
