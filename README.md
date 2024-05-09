@@ -9,7 +9,7 @@ A companion package to geostructures (https://github.com/ccbest/geostructures) e
 
 Geotime is available on PYPI
 ```
-$ pip install geotime
+$ pip install geochron 
 ```
 
 #### Optional Dependencies
