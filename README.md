@@ -18,6 +18,7 @@ Geotime does not require any of the below dependencies to function, however some
 * networkx (chron-nets)
 
 ### Overview
+[![Unit Tests](https://github.com/etalbert102/geochron/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/etalbert102/geochron/actions/workflows/unit-tests.yml)
 
 Geotime enables various ways of displaying and structuring geo-spatial-temporal data
 
