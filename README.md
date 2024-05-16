@@ -16,6 +16,7 @@ $ pip install geochron
 Geotime does not require any of the below dependencies to function, however some functionality uses:
 * plotly (visualization)
 * networkx (chron-nets)
+* timehash (geotimehash)
 
 ### Overview
 
