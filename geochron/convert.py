@@ -47,6 +47,7 @@ def convert(fcol: FeatureCollection, datastructure: str,
         precision = kwargs.get('precision')
         if precision is None:
             print("need the precision keyword for this data structure")
+        assert isinstance(precision, int)
         result = convert_geotimehash(track, precision, hashing_function)
     else: # pragma: no cover
         print("Data structure not supported please check doc string for supported options")

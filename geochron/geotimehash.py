@@ -1,9 +1,10 @@
 """ Geotime hash representation"""
-from typing import Callable
+from typing import Callable, List
 from collections import Counter
 from datetime import  datetime, timedelta
 import timehash
 from geostructures.structures import GeoShape
+from geostructures.time import TimeInterval
 from geostructures import Track
 
 def precision_delta(precision: int):
@@ -17,9 +18,9 @@ def precision_delta(precision: int):
         A timedelta
     """
     if precision == 1:
-        delta = timedelta(years = 16)
+        delta = timedelta(days = 5840)
     elif precision == 2:
-        delta = timedelta(years = 2)
+        delta = timedelta(days = 730)
     elif precision == 3:
         delta = timedelta(days = 91.2)
     elif precision == 4:
@@ -59,11 +60,11 @@ def generate_times(start_time: datetime, end_time: datetime, precision: int):
     start = start_time
     end = end_time
     time_list = []
-    
+
     while start <= end:
         time_list.append(start.timestamp())
         start += precision_delta(precision)
-    
+
     return time_list
 
 
@@ -85,19 +86,31 @@ def timehash_geoshape(geoshape: GeoShape, precision: int):
         A timehash list
     """
     timehash_list = []
+    assert isinstance(geoshape.dt, TimeInterval)
     start_time = geoshape.dt.start
     end_time = geoshape.dt.end
 
     time_list = generate_times(start_time, end_time, precision)
 
-    for time in time_list: 
+    for time in time_list:
         timehash1 = timehash.encode(time, precision)
         timehash_list.append(timehash1)
-    
+
     return timehash_list
 
 
-def append_timehash_to_geohashmap(hashmap, timehash_list):
+def append_timehash_to_geohashmap(hashmap: dict, timehash_list: List):
+    """
+    Appends a timehash to each geohash. If there are multiple timehashes in the list
+    every permutation of geohash/timehash is appended.
+    Args:
+        hashmap: the hashmap produced by a geographic hashing function 
+
+        timehash_list: the associated timehashes 
+
+    Returns:
+        A geotime hashmap
+    """
     geotime_hashmap = {}
     for key, value in hashmap.items():
         for item in timehash_list:
@@ -107,6 +120,15 @@ def append_timehash_to_geohashmap(hashmap, timehash_list):
 
 
 def breakdown_hashmap_by_suffix(hashmap: Counter):
+    """
+    Breaks down a hashmap by the common suffixes. 
+    Args:
+        hashmap: the target hashmap 
+
+    Returns:
+        A dictionary of dictionaries with each shared suffix serving
+        as the outer key
+    """
     suffix_dict = {}
     for key in hashmap:
         suffix = key.split('_')[-1]  # assuming suffixes are defined after the last underscore
@@ -114,7 +136,7 @@ def breakdown_hashmap_by_suffix(hashmap: Counter):
             suffix_dict[suffix] = {key: hashmap[key]}
         else:
             suffix_dict[suffix][key] = hashmap[key]
-    
+
     return suffix_dict
 
 
@@ -162,5 +184,5 @@ def convert_geotimehash(track: Track, precision: int,
         num_shapes = shape_count[outer_key]
         for inner_key, value in inner_dict.items():
             inner_dict[inner_key] /= num_shapes
-    
+
     return combine_dicts(suffix_dict)
