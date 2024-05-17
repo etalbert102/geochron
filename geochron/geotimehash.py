@@ -141,6 +141,16 @@ def breakdown_hashmap_by_suffix(hashmap: Counter):
 
 
 def combine_dicts(d:dict):
+    """
+    Combines a dictionary of dictionaries by dropping the outer keys
+    and flattening the inner dictionaries.
+    Args:
+        d: A dictionary of dictionaries 
+
+    Returns:
+        A dictionary of dictionaries with each shared suffix serving
+        as the outer key
+    """
     combined_dict = {}
     for k, v in d.items():
         if isinstance(v, dict):

@@ -14,10 +14,12 @@ def test_convert():
     )
     test_chronnet = convert(featurecollection,"chronnet", 1)
     test_timehex = convert(featurecollection,"timehex", 1)
+    test_geotimehash = convert(featurecollection,"geotimehash", 1, precision=8)
 
 
     assert list(test_chronnet)[0] == '8a194ad3056ffff'
     assert test_timehex['8a194ad3056ffff'].values[1] == 1
+    assert test_geotimehash['8a194ad3056ffff_b0ffffbe'] == 1
 
 
 
