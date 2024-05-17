@@ -26,7 +26,7 @@ jobs:
 
       - name: Pytest
         run: |
-          coverage run --source geochron / -m pytest && coverage report -m --fail-under 99
+          coverage run --source geochron -m pytest tests && coverage report -m --fail-under 99
 
       - name: MyPy
         run: |
