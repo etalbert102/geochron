@@ -1,5 +1,5 @@
 # Geochron
-
+[![Unit Tests](https://github.com/etalbert102/geochron/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/etalbert102/geochron/actions/workflows/unit-tests.yml)
 
 A companion package to geostructures (https://github.com/ccbest/geostructures) enabling geo-spatial-temporal data structures
 
@@ -7,7 +7,7 @@ A companion package to geostructures (https://github.com/ccbest/geostructures) e
 
 ### Installation
 
-Geotime is available on PYPI
+Geochron is available on PYPI
 ```
 $ pip install geochron 
 ```

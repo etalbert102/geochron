@@ -9,6 +9,7 @@ ConditionalPackageInterceptor.permit_packages(
     {
         'networkx': 'networkx>=3.0,<4.0',
         'plotly': 'plotly>=5,<6',
+        'timehash': 'timehash>=1.2,<2',
     }
 )
 sys.meta_path.append(ConditionalPackageInterceptor)  # type: ignore
