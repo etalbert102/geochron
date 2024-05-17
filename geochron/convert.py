@@ -3,7 +3,7 @@ from geostructures.collections import  FeatureCollection, Track
 from geostructures.geohash import H3Hasher
 from geochron.chronnet import convert_chronnet
 from geochron.timehex import convert_timehex
-
+from geochron.geotimehash import convert_geotimehash
 
 def convert(fcol: FeatureCollection, datastructure: str,
             hour_interval: float, res= int(10), **kwargs):
@@ -43,6 +43,12 @@ def convert(fcol: FeatureCollection, datastructure: str,
         self_loop = kwargs.get('self_loop', True)
         mode = kwargs.get('mode', "directed")
         result = convert_chronnet(track, hour_interval, hashing_function, self_loop, mode)
+    elif datastructure == "geotimehash":
+        precision = kwargs.get('precision')
+        if precision is None:
+            print("need the precision keyword for this data structure")
+        assert isinstance(precision, int)
+        result = convert_geotimehash(track, precision, hashing_function)
     else: # pragma: no cover
         print("Data structure not supported please check doc string for supported options")
 
