@@ -25,6 +25,7 @@ Geotime enables various ways of displaying and structuring geo-spatial-temporal 
 The methods currently supported are:
 * time hexes H3 Geohashes with second dimension time (Original Niemeyer can also be used)
 * chron-nets (https://www.nature.com/articles/s41467-020-17634-2)
+* geotimehashes 
 
 
 #### Basic Functionality
