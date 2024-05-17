@@ -25,11 +25,12 @@ Geotime enables various ways of displaying and structuring geo-spatial-temporal 
 The methods currently supported are:
 * time hexes H3 Geohashes with second dimension time (Original Niemeyer can also be used)
 * chron-nets (https://www.nature.com/articles/s41467-020-17634-2)
+* geotimehash (https://isprs-annals.copernicus.org/articles/IV-4-W2/31/2017/isprs-annals-IV-4-W2-31-2017.pdf)
 
 
 #### Basic Functionality
 The primary and simplest use case is converting a geostructures FeatureCollection to another datastructure.
-Geostructures FeatureCollections can convert most major 
+Geostructures FeatureCollections can take most major geospatial standards like shapefiles and geopandas. See geostructures documentation. 
 ```python
 from geochron import convert
 
