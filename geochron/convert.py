@@ -30,6 +30,9 @@ def convert(fcol: FeatureCollection, datastructure: str,
         mode: (str) (Default directed)
             Applies to chronnets only whether network is
             directed or not
+        precision: (int) (No default)
+            Applies to geotimehash only precision level
+            of time hashes
 
     Returns:
         Desired geotime representation
