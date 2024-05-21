@@ -14,7 +14,7 @@ track = Track(
 )
 
 def test_get_timestamp_intervals():
-    timestamps = get_timestamp_intervals(track,1)
+    timestamps = get_timestamp_intervals(track,dt.timedelta(hours=1))
     
     assert timestamps[-1] == dt.datetime(2020, 1, 1, 10, 5,1, tzinfo=dt.timezone.utc)
 

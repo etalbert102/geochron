@@ -64,7 +64,7 @@ def test_convert_chronnet():
     ]
     )
 
-    test_chronnet = convert_chronnet(track, 1, hasher.hash_collection, True, "directed")
+    test_chronnet = convert_chronnet(track, dt.timedelta(hours=1), hasher.hash_collection, True, "directed")
     
     assert list(test_chronnet)[0] == '8a194ad3056ffff'
     

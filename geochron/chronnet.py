@@ -1,4 +1,5 @@
 """ Representation as chronnets """
+from datetime import  timedelta
 import itertools
 from typing import Callable, List
 import networkx as nx # type: ignore
@@ -96,7 +97,7 @@ def chronnet_create(df: pd.DataFrame, self_loops: bool, mode= str):
     return net
 
 
-def convert_chronnet(fcol: FeatureCollection, hour_interval: float,
+def convert_chronnet(fcol: FeatureCollection, time_delta: timedelta,
      hash_func: Callable, self_loops: bool, mode: str):
     """
     Converts a FeatureCollection into a chronnet with a specified time interval
@@ -105,7 +106,7 @@ def convert_chronnet(fcol: FeatureCollection, hour_interval: float,
     Args:
         fcol: a FeatureCollection with time bound shapes 
 
-        hour_interval: the length in hours of the desired interval
+        time_delta: the desired time interval
 
         hash_func: the hashing function
 
@@ -117,7 +118,7 @@ def convert_chronnet(fcol: FeatureCollection, hour_interval: float,
         A networkx network 
     """
     track = Track(fcol.geoshapes)
-    timestamps = get_timestamp_intervals(track, hour_interval)
+    timestamps = get_timestamp_intervals(track, time_delta)
 
     track_list = time_slice_track(track, timestamps)
 

@@ -32,16 +32,17 @@ The methods currently supported are:
 The primary and simplest use case is converting a geostructures FeatureCollection to another datastructure.
 Geostructures FeatureCollections can take most major geospatial standards like shapefiles and geopandas. See geostructures documentation. 
 ```python
+import datetime as dt
 from geochron import convert_timehex, convert_chronnet, convert_geotimehash
 from geostructures.geohash import H3Hasher
 
 hasher = H3Hasher(resolution=11)
 
 timehex_output = convert_timehex(fcol=Feature_Collection_of_time_shapes,
-hour_interval= 1, hash_func= hasher.hash_collection)
+time_delta= dt.timedelta(hours=1), hash_func= hasher.hash_collection)
 
 chronnet_output = convert_chronnet(fcol=Feature_Collection_of_time_shapes,
-hour_interval= 1, hash_func= hasher.hash_collection, self_loop = True, mode = "directed")
+time_delta= dt.timedelta(hours=1), hash_func= hasher.hash_collection, self_loop = True, mode = "directed")
 
 geotimehash_output = convert_geotimehash(fcol=Feature_Collection_of_time_shapes, precision = 8,
 hash_func= hasher.hash_collection)

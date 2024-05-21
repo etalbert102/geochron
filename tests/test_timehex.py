@@ -39,6 +39,6 @@ def test_convert_chronnet():
     ]
     )
 
-    test_timehex = convert_timehex(track, 1, hasher.hash_collection)
+    test_timehex = convert_timehex(track, dt.timedelta(hours=1), hasher.hash_collection)
 
     assert test_timehex['8a194ad3056ffff'].values[1] == 1
