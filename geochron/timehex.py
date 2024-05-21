@@ -1,7 +1,7 @@
 """ Representation as time hexes """
 from typing import Callable, List
 import pandas as pd
-from geostructures.collections import Track
+from geostructures.collections import FeatureCollection, Track
 from geochron.time_slicing import get_timestamp_intervals, time_slice_track
 
 
@@ -45,13 +45,13 @@ def hash_tracks_into_timehexdf(track_list: List, timestamps: List, hash_func: Ca
 
     return df
 
-def convert_timehex(track: Track, hour_interval: float, hash_func: Callable):
+def convert_timehex(fcol: FeatureCollection, hour_interval: float, hash_func: Callable):
     """
-    Converts a track into a timehex reprsentation with a specified time interval
+    Converts a FeatureCollection into a timehex representation with a specified time interval
     using a specified hashing function
     
     Args:
-        track_list: a list of tracks broken down by equal intervals
+        fcol: a FeatureCollection with time bound shapes
 
         hour_interval: the length in hours of the desired interval
 
@@ -60,6 +60,8 @@ def convert_timehex(track: Track, hour_interval: float, hash_func: Callable):
     Returns:
         A pandas dataframe
     """
+    track = Track(fcol.geoshapes)
+
     timestamps = get_timestamp_intervals(track, hour_interval)
 
     track_list = time_slice_track(track, timestamps)

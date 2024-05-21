@@ -5,7 +5,7 @@ import networkx as nx # type: ignore
 import numpy as np
 import pandas as pd
 
-from geostructures.collections import  Track
+from geostructures.collections import  FeatureCollection,Track
 from geochron.time_slicing import get_timestamp_intervals, time_slice_track
 
 
@@ -96,14 +96,14 @@ def chronnet_create(df: pd.DataFrame, self_loops: bool, mode= str):
     return net
 
 
-def convert_chronnet(track: Track, hour_interval: float,
+def convert_chronnet(fcol: FeatureCollection, hour_interval: float,
      hash_func: Callable, self_loops: bool, mode: str):
     """
-    Converts a track into a chronnet with a specified time interval
+    Converts a FeatureCollection into a chronnet with a specified time interval
     using a specified hashing function
     
     Args:
-        track: the target geostructures Track 
+        fcol: a FeatureCollection with time bound shapes 
 
         hour_interval: the length in hours of the desired interval
 
@@ -116,6 +116,7 @@ def convert_chronnet(track: Track, hour_interval: float,
     Returns:
         A networkx network 
     """
+    track = Track(fcol.geoshapes)
     timestamps = get_timestamp_intervals(track, hour_interval)
 
     track_list = time_slice_track(track, timestamps)
