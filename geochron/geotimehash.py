@@ -5,7 +5,7 @@ from datetime import  datetime, timedelta
 import timehash
 from geostructures.structures import GeoShape
 from geostructures.time import TimeInterval
-from geostructures import Track
+from geostructures import FeatureCollection, Track
 
 def precision_delta(precision: int):
     """
@@ -160,16 +160,16 @@ def combine_dicts(d:dict):
     return combined_dict
 
 
-def convert_geotimehash(track: Track, precision: int,
+def convert_geotimehash(fcol: FeatureCollection, precision: int,
      hash_func: Callable):
     """
-    Converts a track into a chronnet by a specified timehash precision
+    Converts a FeatureCollection into a chronnet by a specified timehash precision
     using a specified hashing function
     
     Args:
-        track: the target geostructures Track 
+        fcol: a FeatureCollection with time bound shapes 
 
-        hour_interval: the length in hours of the desired interval
+        precision: the precision of the time hash
 
         hash_func: the hashing function
 
@@ -177,6 +177,7 @@ def convert_geotimehash(track: Track, precision: int,
     Returns:
         A geotime hashmap
     """
+    track = Track(fcol.geoshapes)
     master_geotime_hashmap:Counter = Counter()
     shape_count:Counter = Counter()
 

@@ -3,7 +3,9 @@ import sys
 
 from geochron._version import __version__  # noqa: F401
 from geochron.utils.conditional_imports import ConditionalPackageInterceptor
-from geochron.convert import convert
+from geochron.chronnet import convert_chronnet
+from geochron.timehex import convert_timehex
+from geochron.geotimehash import convert_geotimehash
 
 ConditionalPackageInterceptor.permit_packages(
     {
@@ -15,6 +17,7 @@ ConditionalPackageInterceptor.permit_packages(
 sys.meta_path.append(ConditionalPackageInterceptor)  # type: ignore
 
 __all__ = [
-    'convert'
-
+    'convert_chronnet',
+    'convert_timehex',
+    'convert_geotimehash' 
 ]
