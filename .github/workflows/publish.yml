@@ -4,7 +4,9 @@ on:
   push:
     tags:
       - '*'
-
+permissions:
+  # IMPORTANT: this permission is mandatory for trusted publishing
+  id-token: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,22 +34,11 @@ jobs:
 
       - name: MyPy
         run: |
-          mypy geostructures --ignore-missing-imports
+          mypy geochron --ignore-missing-imports
 
       - name: Build package
         run: |
           python -m build
 
-        pypi-publish:
-      - name: upload release to PyPI
-      runs-on: ubuntu-latest
-      # Specifying a GitHub environment is optional, but strongly encouraged
-      environment: release
-      permissions:
-        # IMPORTANT: this permission is mandatory for trusted publishing
-        id-token: write
-      steps:
-        # retrieve your distributions here
-
-        - name: Publish package distributions to PyPI
-          uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
