@@ -2,7 +2,6 @@
 from datetime import  timedelta
 import itertools
 from typing import Callable, List
-import networkx as nx # type: ignore
 import numpy as np
 import pandas as pd
 
@@ -49,7 +48,8 @@ def hash_tracks_into_netdf(track_list: List, timestamps: List, hash_func: Callab
 def chronnet_create(df: pd.DataFrame, self_loops: bool, mode= str):
     """
     Converts a properly formatted pandas dataframe with the columns
-    of cell and time to a networkx network. 
+    of cell and time to a networkx network where nodes are locations
+    and edges are formed between nodes with consecutive times. 
     
     Args:
         df: a pandas dataframe withe two columns cell and time
@@ -61,6 +61,8 @@ def chronnet_create(df: pd.DataFrame, self_loops: bool, mode= str):
     Returns:
         A networkx network
     """
+    # pylint: disable=import-outside-toplevel
+    import networkx as nx # type: ignore
     time_seq = sorted(np.unique(df['time']))
     if len(time_seq) < 2: # pragma: no cover
         print("The total time interval in the dataset should be larger than two.")

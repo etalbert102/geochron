@@ -24,8 +24,9 @@ Geotime enables various ways of displaying and structuring geo-spatial-temporal 
 
 The methods currently supported are:
 * time hexes H3 Geohashes with second dimension time (Original Niemeyer can also be used)
-* chron-nets (https://www.nature.com/articles/s41467-020-17634-2)
+* chron-net (https://www.nature.com/articles/s41467-020-17634-2)
 * geotimehash (https://isprs-annals.copernicus.org/articles/IV-4-W2/31/2017/isprs-annals-IV-4-W2-31-2017.pdf)
+* geosynchnet (geographic synchronous networks)
 
 
 #### Basic Functionality
@@ -46,6 +47,9 @@ time_delta= dt.timedelta(hours=1), hash_func= hasher.hash_collection, self_loop 
 
 geotimehash_output = convert_geotimehash(fcol=Feature_Collection_of_time_shapes, precision = 8,
 hash_func= hasher.hash_collection)
+
+geosynchnet_output = convert_geosynchnet(fcol=Feature_Collection_of_time_shapes, 
+time_delta= dt.timedelta(hours=1), hash_func= hasher.hash_collection)
 
 ```
 

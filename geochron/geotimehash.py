@@ -2,7 +2,6 @@
 from typing import Callable, List
 from collections import Counter
 from datetime import  datetime, timedelta
-import timehash
 from geostructures.structures import GeoShape
 from geostructures.time import TimeInterval
 from geostructures import FeatureCollection, Track
@@ -85,6 +84,8 @@ def timehash_geoshape(geoshape: GeoShape, precision: int):
     Returns:
         A timehash list
     """
+    # pylint: disable=import-outside-toplevel
+    import timehash
     timehash_list = []
     assert isinstance(geoshape.dt, TimeInterval)
     start_time = geoshape.dt.start
