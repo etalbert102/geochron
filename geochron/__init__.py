@@ -6,6 +6,7 @@ from geochron.utils.conditional_imports import ConditionalPackageInterceptor
 from geochron.chronnet import convert_chronnet
 from geochron.timehex import convert_timehex
 from geochron.geotimehash import convert_geotimehash
+from geochron.geosynchnet import convert_geosynchnet
 
 ConditionalPackageInterceptor.permit_packages(
     {
@@ -19,5 +20,6 @@ sys.meta_path.append(ConditionalPackageInterceptor)  # type: ignore
 __all__ = [
     'convert_chronnet',
     'convert_timehex',
-    'convert_geotimehash' 
+    'convert_geotimehash',
+    'convert_geosynchnet' 
 ]
