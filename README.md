@@ -15,12 +15,12 @@ $ pip install geochron
 #### Optional Dependencies
 Geotime does not require any of the below dependencies to function, however some functionality uses:
 * plotly (visualization)
-* networkx (chron-nets)
+* networkx (chron-nets/geosynchnet)
 * timehash (geotimehash)
 
 ### Overview
 
-Geotime enables various ways of displaying and structuring geo-spatial-temporal data
+Geochron enables various ways of displaying and structuring geo-spatial-temporal data
 
 The methods currently supported are:
 * time hexes H3 Geohashes with second dimension time (Original Niemeyer can also be used)
