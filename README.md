@@ -1,7 +1,7 @@
-<p align="center">
+<picture align="center">
   <source media="(prefers-color-scheme: dark)" srcset="./static/dark_logo.png">
   <img alt="Geochron Logo" src="./static/white_logo.png">
-</p>
+</picture>
 
 # Geochron
 [![Unit Tests](https://github.com/etalbert102/geochron/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/etalbert102/geochron/actions/workflows/unit-tests.yml)
