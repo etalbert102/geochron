@@ -1,3 +1,7 @@
+<picture align="center">
+  <img src="./static/geo_chronlogo.PNG" alt="Geochron logo"/>
+</picture>
+
 # Geochron
 [![Unit Tests](https://github.com/etalbert102/geochron/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/etalbert102/geochron/actions/workflows/unit-tests.yml)
 
