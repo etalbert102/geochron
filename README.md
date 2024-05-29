@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="./static/geo_chronlogo.png" alt="Geochron logo"/ >
+  <source media="(prefers-color-scheme: dark)" srcset="./static/dark_logo.png">
+  <img alt="Geochron Logo" src="./static/white_logo.png">
 </p>
 
 # Geochron
