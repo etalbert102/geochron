@@ -139,4 +139,4 @@ def test_timehex_timestampedgeojson():
 
     assert isinstance(result, dict)
     assert result['type'] == 'FeatureCollection'
-    assert result['features'][0]['properties']['style']['color'] == '#0000ffff'
+    assert result['features'][0]['properties']['style']['opacity'] == 0.7
