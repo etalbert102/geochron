@@ -136,7 +136,7 @@ def timehex_timestampedgeojson(timehex: pd.DataFrame, cmap:Optional[Callable] = 
     start_time_list = timehex['start_time'].tolist()
     select_timehex = timehex.drop(['interval', 'start_time', 'end_time'], axis=1).fillna(0)
     list_hashmaps = select_timehex.to_dict('records')
-    polygon_list = []
+    polygon_list:list = []
 
     #color scale
     max_color = select_timehex.values.max()
