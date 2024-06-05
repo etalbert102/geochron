@@ -44,7 +44,7 @@ setuptools.setup(
     ],
     python_requires='>=3.8',
     install_requires=[
-        'geostructures>= 0.8.1, <1.0',
+        'geostructures>= 0.10.0, <1.0',
         'numpy>=1,<2',  
         'pandas>=2,<3'
     ],
