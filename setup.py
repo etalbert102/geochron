@@ -32,7 +32,7 @@ setuptools.setup(
     description="A companion package to geostructures enabling geo-spatial-temporal data structures.",
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url="https://github.com/etalbert/geochron",
+    url="https://github.com/etalbert102/geochron",
     packages=setuptools.find_packages(
         include=('geochron*', ),
         exclude=('*tests', 'tests*')
