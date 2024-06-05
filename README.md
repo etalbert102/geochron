@@ -24,7 +24,7 @@ Geochron does not require any of the below dependencies to function, however som
 
 ### Overview
 
-Geochron enables various ways of displaying and structuring geo-spatial-temporal data
+Geochron enables various ways of displaying and structuring geospatial-temporal data
 
 The methods currently supported are:
 * time hexes H3 Geohashes with second dimension time (Original Niemeyer can also be used)
@@ -56,7 +56,7 @@ geosynchnet_output = convert_geosynchnet(fcol=Feature_Collection_of_time_shapes,
 time_delta= dt.timedelta(hours=1), hash_func= hasher.hash_collection)
 
 ```
-
+Geochron also provides helper functions for visualization using popular libraries like Folium. 
 
 ## More Information
 
