@@ -41,8 +41,8 @@ def hash_tracks_into_timehexdf(track_list: List, timestamps: List, hash_func: Ca
     df = df.reset_index(names='interval')
 
     split_df = df['interval'].str.split(',', expand=True)# pylint: disable=unsubscriptable-object
-    df.loc[:, 'start_time'] = split_df[0]
-    df.loc[:, 'end_time'] = split_df[1]
+    df.loc[:, 'start_time'] = pd.to_datetime(split_df[0])
+    df.loc[:, 'end_time'] = pd.to_datetime(split_df[1])
 
     return df
 

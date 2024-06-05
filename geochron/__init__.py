@@ -11,8 +11,8 @@ from geochron.geosynchnet import convert_geosynchnet
 ConditionalPackageInterceptor.permit_packages(
     {
         'networkx': 'networkx>=3.0,<4.0',
-        'plotly': 'plotly>=5,<6',
         'timehash': 'timehash>=1.2,<2',
+        'branca': 'branca>=0.7.2,<1.0',
     }
 )
 sys.meta_path.append(ConditionalPackageInterceptor)  # type: ignore

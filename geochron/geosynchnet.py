@@ -30,9 +30,9 @@ def geosynchnet_create(df: pd.DataFrame):
     # For each time group, add edges between all cells in the group
     for name, group in grouped:
         cells = group['cell'].tolist()
-        for i in range(len(cells)):
-            for j in range(i+1, len(cells)):
-                net.add_edge(cells[i], cells[j])
+        for i, cell_i in enumerate(cells):
+            for cell_j in cells[i+1:]:
+                net.add_edge(cell_i, cell_j)
 
     return net
 
