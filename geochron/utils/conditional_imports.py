@@ -121,3 +121,4 @@ class ConditionalPackageInterceptor:  # pragma: no cover
             "Please execute the following command to continue: \n "
             f"    pip install {cls.PERMITTED_PACKAGES[name]}"
         )
+    

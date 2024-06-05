@@ -1,5 +1,7 @@
 import json
 import pandas as pd
+import h3
+from branca.colormap import LinearColormap
 from geochron.visualization.folium import *
 
 def test_timehex_styledict():
@@ -91,3 +93,50 @@ def test_timehex_backgroundata():
         assert feature["geometry"]["type"] == "Polygon"
         assert len(feature["geometry"]["coordinates"]) > 0
         assert feature["id"] in timehex.columns
+
+
+def test_add_hashmap_properties():
+    # Define a simple colormap function for testing
+    def cmap(value):
+        return '#000000'
+
+    # Define the original hashmap
+    original_hashmap = {'89283082837ffff': 1, '89283082833ffff': 0}
+    time = '2024-06-05'
+    opacity = 0.7
+
+    # Call the function with the test inputs
+    result = add_hashmap_properties(original_hashmap, time, cmap, opacity)
+
+    # Define the expected result
+    expected_result = {
+        '89283082837ffff': {
+            'popup': 'weight= 1<br> center(lat,lon)= ' + str(h3.h3_to_geo('89283082837ffff')),
+            'time': time,
+            'style': {'opacity': opacity, 'color': cmap(1)}
+        }
+    }
+
+    # Assert that the function output is as expected
+    assert result == expected_result
+
+def test_timehex_timestampedgeojson():
+    # Prepare a sample dataframe
+    data = {
+        'start_time': ['2022-01-01', '2022-01-02'],
+        'interval': [1, 1],
+        'end_time': ['2022-01-02', '2022-01-03'],
+        '89283082837ffff': [1, 2],
+        '89283082833ffff': [3, 4]
+    }
+    df = pd.DataFrame(data)
+
+    # Prepare a sample colormap
+    cmap = LinearColormap(['blue', 'red'], vmin=1, vmax=4)
+
+    # Call the function with the sample dataframe and colormap
+    result = timehex_timestampedgeojson(df, cmap)
+
+    assert isinstance(result, dict)
+    assert result['type'] == 'FeatureCollection'
+    assert result['features'][0]['properties']['style']['color'] == '#0000ffff'
