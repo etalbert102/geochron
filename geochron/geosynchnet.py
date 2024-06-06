@@ -19,22 +19,24 @@ def geosynchnet_create(df: pd.DataFrame):
     Returns:
         A networkx network
     """
-    # pylint: disable=import-outside-toplevel
-    import networkx as nx # type: ignore
-    # Initialize an empty network
+    import networkx as nx
     net = nx.Graph()
 
-    # Group the dataframe by time
     grouped = df.groupby('time')
 
-    # For each time group, add edges between all cells in the group
     for name, group in grouped:
         cells = group['cell'].tolist()
         for i, cell_i in enumerate(cells):
             for cell_j in cells[i+1:]:
-                net.add_edge(cell_i, cell_j)
+                if net.has_edge(cell_i, cell_j):
+                    # if the edge already exists, increment the weight by 1
+                    net[cell_i][cell_j]['weight'] += 1
+                else:
+                    # otherwise, add the edge with a weight of 1
+                    net.add_edge(cell_i, cell_j, weight=1)
 
     return net
+
 
 def convert_geosynchnet(fcol: FeatureCollection, time_delta: timedelta,
      hash_func: Callable):

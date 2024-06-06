@@ -25,6 +25,7 @@ def test_geosynchnet_create():
     assert list(test_network)[0] == '8a194ad32b07fff'
     assert test_network.has_edge('8a194ad32b07fff', '8a194ad3056ffff') == True
     assert test_network.has_edge('8a194ad32167fff', '8a194ad3078ffff') == False
+    assert test_network['8a194ad32b07fff']['8a194ad3056ffff']['weight'] == 1
 
 def test_convert_geosynchnet():
     track = Track(

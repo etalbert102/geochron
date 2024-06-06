@@ -5,6 +5,7 @@ from geostructures import Coordinate, GeoCircle, GeoPoint
 from geostructures.collections import  Track
 from geostructures.geohash import H3Hasher
 from geostructures.time import  TimeInterval
+import pytest 
 
 def test_precision_delta():
     delta1 = precision_delta(1)
@@ -28,6 +29,8 @@ def test_precision_delta():
     assert delta8 == timedelta(minutes = 4)
     assert delta9 == timedelta(seconds = 30)
     assert delta10 == timedelta(seconds = 3.6)
+    with pytest.raises(UnboundLocalError):
+        precision_delta(11)
 
 def test_generate_times():
     start_time = datetime(2020, 1, 1, 9, 30, tzinfo=timezone.utc)
@@ -70,11 +73,15 @@ def test_breakdown_hashmap_by_suffix():
     assert dict_of_dicts['b0ffffbc']['8b194ad32b23fff_b0ffffbc'] == 1
 
 def test_combine_dicts():
-    testdict = {'a':{'r':2,'b':3},
-                'b':{'m':2,'n':3}}
-    result_dict = combine_dicts(testdict)
+    # Test with a dictionary of dictionaries
+    d = {'dict1': {'key1': 'value1', 'key2': 'value2'}, 'dict2': {'key3': 'value3', 'key4': 'value4'}}
+    combined = combine_dicts(d)
+    assert combined == {'key1': 'value1', 'key2': 'value2', 'key3': 'value3', 'key4': 'value4'}
 
-    assert result_dict['m'] == 2
+    # Test with a dictionary containing non-dictionary items
+    d = {'dict1': {'key1': 'value1', 'key2': 'value2'}, 'non_dict': 'value'}
+    combined = combine_dicts(d)
+    assert combined == {'key1': 'value1', 'key2': 'value2', 'non_dict': 'value'}
 
 def test_convert_geotimehash():
     hasher = H3Hasher(resolution = 10)
