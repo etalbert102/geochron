@@ -47,7 +47,7 @@ timehex_output = convert_timehex(fcol=Feature_Collection_of_time_shapes,
 time_delta= dt.timedelta(hours=1), hash_func= hasher.hash_collection)
 
 chronnet_output = convert_chronnet(fcol=Feature_Collection_of_time_shapes,
-time_delta= dt.timedelta(hours=1), hash_func= hasher.hash_collection, self_loop = True, mode = "directed")
+time_delta= dt.timedelta(hours=1), hash_func= hasher.hash_collection, self_loops = True, mode = "directed")
 
 geotimehash_output = convert_geotimehash(fcol=Feature_Collection_of_time_shapes, precision = 8,
 hash_func= hasher.hash_collection)
