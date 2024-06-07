@@ -2,14 +2,11 @@ from geochron.visualization.pydeck import *
 
 def test_h3edge_to_coordinates():
     # Example input edge
-    edge = ('8a2a1072b59ffff', '8a2a1072b5bffff', 10)
+    edge = ('89283082837ffff', '89283082833ffff', 10)
 
     # Expected output coordinates
-    expected_coordinates = (
-        (38.895110, -77.036370),  # Origin coordinates
-        (38.895110, -77.036370),  # Destination coordinates
-        10  # Edge weight
-    )
+    expected_coordinates = ((37.777493908651344, -122.42904243437428),
+                            (37.776167791691506, -122.42545196039973), 10)
 
     # Call the function
     result = h3edge_to_coordinates(edge)
