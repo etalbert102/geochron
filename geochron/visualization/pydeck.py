@@ -1,5 +1,5 @@
 'Pydeck helpers'
-import h3 
+import h3
 from networkx import Graph
 
 def h3edge_to_coordinates(edge:tuple):
@@ -8,24 +8,27 @@ def h3edge_to_coordinates(edge:tuple):
     hexes and weight representing a geographic network edge.
 
     Args:
-        edge: A tuple in the form (h3encoding_origin:str, h3encoding_destination:str, edge_weight:int) 
+        edge: A tuple in the form (h3encoding_origin:str, 
+        h3encoding_destination:str, edge_weight:int) 
 
     Returns:
-        A tuple in the form of (coordinate_origin:float, coordinate_destination:float, edge_weight:int)
+        A tuple in the form of (coordinate_origin:float, 
+        coordinate_destination:float, edge_weight:int)
     """
- 
+
     edge_coordinate = (h3.h3_to_geo(edge[0]), h3.h3_to_geo(edge[1]), edge[2])
 
     return edge_coordinate
 
 
-def convert_to_circledict(edgecoordinates:tuple, origin:str, destination:str):
+def convert_to_pydeckdict(edgecoordinates:tuple, origin:str, destination:str):
     """
     Converts a tuple with coordinate locations from a tuple containing h3
     hexes and weight representing a geographic network edge.
 
     Args:
-        edgecoordinates: A tuple in the form of (coordinate_origin:float, coordinate_destination:float, edge_weight:int)
+        edgecoordinates: A tuple in the form of 
+        (coordinate_origin:float, coordinate_destination:float, edge_weight:int)
         origin: the origin hex in string format
         destination: the origin hex in string format
 
@@ -59,8 +62,6 @@ def network_arc_circle(network:Graph):
     edgelist = list(network.edges.data('weight'))
     for edge in edgelist:
         edgecoordinates = h3edge_to_coordinates(edge)
-        dict_edge = convert_to_circledict(edgecoordinates, edge[0], edge[1])
+        dict_edge = convert_to_pydeckdict(edgecoordinates, edge[0], edge[1])
         pydeck_data.append(dict_edge)
-    
     return pydeck_data
-
