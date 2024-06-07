@@ -1,5 +1,4 @@
 from geochron.visualization.pydeck import *
-import networkx as nx
 
 def test_h3edge_to_coordinates():
     # Example input edge
@@ -37,20 +36,10 @@ def test_convert_to_pydeckdict():
     assert convert_to_pydeckdict(edgecoordinates, origin, destination) == expected_output
 
 def test_network_arc_circle():
-    # Create a simple graph for testing
-    G = nx.Graph()
-    G.add_edge('A', 'B', weight=1.0)
-    G.add_edge('B', 'C', weight=2.0)
-
-    # Call the function with the test graph
+    G = Graph()
+    G.add_edge('8928308280fffff', '8928308280fffff', weight=1)
     result = network_arc_circle(G)
-
-    # Check the type of the result
-    assert isinstance(result, list), "Result should be a list"
-
-    # Check the length of the result
-    assert len(result) == 2, "Result length should match the number of edges"
-
-    # Check the type of the elements in the result
-    for item in result:
-        assert isinstance(item, dict), "Each item in the result should be a dictionary"
+    assert isinstance(result, list)
+    assert len(result) == 1
+    assert isinstance(result[0], dict)
+    assert set(result[0].keys()) == {"start_lat", "start_lng", "end_lat", "end_lng", "width", "origin", "destination"}
