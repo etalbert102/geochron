@@ -82,7 +82,7 @@ def test_combine_dicts():
     d = {'dict1': {'key1': 'value1', 'key2': 'value2'}, 'non_dict': 'value'}
     combined = combine_dicts(d)
     assert combined == {'key1': 'value1', 'key2': 'value2', 'non_dict': 'value'}
-
+              
 def test_convert_geotimehash():
     hasher = H3Hasher(resolution = 10)
     track = Track(

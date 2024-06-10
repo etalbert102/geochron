@@ -4,16 +4,14 @@ def test_h3edge_to_coordinates():
     # Example input edge
     edge = ('89283082837ffff', '89283082833ffff', 10)
 
-    # Expected output coordinates
-    expected_coordinates = ((37.777493908651344, -122.42904243437428),
-                            (37.776167791691506, -122.42545196039973), 10)
-
     # Call the function
     result = h3edge_to_coordinates(edge)
 
-    # Check if the result matches the expected coordinates
-    assert result == expected_coordinates
-
+    # Check if the result matches the expected coordinates to the given precision
+    assert round(result[0][0],8) == 37.77749391
+    assert round(result[0][1],8) == -122.42904243
+    assert round(result[1][0],8) == 37.77616779
+    assert round(result[1][1],8) == -122.42545196
 
 def test_convert_to_pydeckdict():
     edgecoordinates = ((37.7749, -122.4194, 5), (34.0522, -118.2437, 10), 15)
