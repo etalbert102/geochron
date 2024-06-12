@@ -104,7 +104,7 @@ def timehex_backgroundata(timehex: pd.DataFrame):
 
     return backgroundata
 
-def add_hashmap_properties(original_hashmap:dict, time:pd.Timestamp, cmap: Callable, opacity: float):
+def add_hashmap_properties(original_hashmap:dict, time:pd.Timestamp, opacity: float, cmap: Optional[Callable] = None):
     """
     Adds properties to the hashmap necessary for display.
 
@@ -123,9 +123,9 @@ def add_hashmap_properties(original_hashmap:dict, time:pd.Timestamp, cmap: Calla
         color_min = 0
         color_max = 0
     else:
-        max_key = max(removed_empty, key=removed_empty.get)
-        min_key = min(removed_empty, key=removed_empty.get)
-        color_min = removed_empty[min_key]
+        max_key = max(removed_empty, key=removed_empty.get) # type: ignore[arg-type] 
+        min_key = min(removed_empty, key=removed_empty.get) # type: ignore[arg-type] 
+        color_min = removed_empty[min_key] 
         color_max = removed_empty[max_key]
     
     if cmap is None:
@@ -156,7 +156,8 @@ def timehex_timestampedgeojson(timehex: pd.DataFrame, opacity= float(.7), cmap:O
     polygon_list:list = []
 
     for hashmap, start_time in zip(list_hashmaps, start_time_list):
-        hashmap_properties= add_hashmap_properties(hashmap, start_time, cmap, opacity)
+        hashmap_properties= add_hashmap_properties(original_hashmap = hashmap,\
+        time = start_time, opacity = opacity, cmap= cmap)
         polygons = {h3_to_geopolygon(k, properties= v) for k,v in hashmap_properties.items()}
         polygon_list.extend(polygons)
 

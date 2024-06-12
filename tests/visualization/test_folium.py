@@ -106,7 +106,7 @@ def test_add_hashmap_properties():
     opacity = 0.7
 
     # Call the function with the test inputs
-    result = add_hashmap_properties(original_hashmap, time, cmap, opacity)
+    result = add_hashmap_properties(original_hashmap, time, opacity, cmap)
 
     # Define the expected result
     expected_result = {
@@ -132,7 +132,7 @@ def test_timehex_timestampedgeojson():
     df = pd.DataFrame(data)
 
     # Call the function with the sample dataframe and colormap
-    result = timehex_timestampedgeojson(df, .7)
+    result = timehex_timestampedgeojson(df)
 
     assert isinstance(result, dict)
     assert result['type'] == 'FeatureCollection'
