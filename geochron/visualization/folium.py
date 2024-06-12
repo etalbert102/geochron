@@ -104,26 +104,43 @@ def timehex_backgroundata(timehex: pd.DataFrame):
 
     return backgroundata
 
-def add_hashmap_properties(original_hashmap:dict, time, cmap: Callable, opacity= float(.7)):
+def add_hashmap_properties(original_hashmap:dict, time:pd.Timestamp, cmap: Callable, opacity: float):
     """
-    Formats backgroundata polygons appropriate for a folium TimeSliderChoropleth from
-    a timehex dataframe
+    Adds properties to the hashmap necessary for display.
 
     Args:
-        timehex: A timehex dataframe
-
+        original_hashmap: a hashmap
+        time: time of hashmap
+        cmap: a Branca colormap
+        opacity: desired opacity of shapes
     Returns:
         a GeoJson FeatureCollection
     """
     new_dict = {}
     removed_empty = {key: value for key, value in original_hashmap.items() if value != 0}
+
+    if len(removed_empty) == 0:
+        color_min = 0
+        color_max = 0
+    else:
+        max_key = max(removed_empty, key=removed_empty.get)
+        min_key = min(removed_empty, key=removed_empty.get)
+        color_min = removed_empty[min_key]
+        color_max = removed_empty[max_key]
+    
+    if cmap is None:
+        used_cmap = LinearColormap(colors=['blue','red'], \
+        vmin= color_min, vmax= color_max)
+    else:
+        used_cmap = cmap
+
     for key, value in removed_empty.items():
         new_dict[key] = {'popup': 'weight= ' + str(value) +
                          '<br> center(lat,lon)= ' + str(h3.h3_to_geo(key)), 
-                         'time': time,'style':{'opacity': opacity, 'color': cmap(value)}}
+                         'time': time,'style':{'opacity': opacity, 'color': used_cmap(value)}}
     return new_dict
 
-def timehex_timestampedgeojson(timehex: pd.DataFrame, cmap:Optional[Callable] = None):
+def timehex_timestampedgeojson(timehex: pd.DataFrame, opacity= float(.7), cmap:Optional[Callable] = None):
     """
     Formats a timehex into the correct data format for Folium's timestampedgeojson
 
@@ -138,16 +155,8 @@ def timehex_timestampedgeojson(timehex: pd.DataFrame, cmap:Optional[Callable] = 
     list_hashmaps = select_timehex.to_dict('records')
     polygon_list:list = []
 
-    #color scale
-    max_color = select_timehex.values.max()
-    min_color = select_timehex.values.min()
-    if cmap is None:
-        used_cmap = LinearColormap(colors=['blue','red'], vmin=min_color, vmax=max_color)
-    else:
-        used_cmap = cmap
-
     for hashmap, start_time in zip(list_hashmaps, start_time_list):
-        hashmap_properties= add_hashmap_properties(hashmap, start_time, used_cmap)
+        hashmap_properties= add_hashmap_properties(hashmap, start_time, cmap, opacity)
         polygons = {h3_to_geopolygon(k, properties= v) for k,v in hashmap_properties.items()}
         polygon_list.extend(polygons)
 

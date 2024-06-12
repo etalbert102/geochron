@@ -131,11 +131,8 @@ def test_timehex_timestampedgeojson():
     }
     df = pd.DataFrame(data)
 
-    # Prepare a sample colormap
-    cmap = LinearColormap(['blue', 'red'], vmin=1, vmax=4)
-
     # Call the function with the sample dataframe and colormap
-    result = timehex_timestampedgeojson(df, cmap)
+    result = timehex_timestampedgeojson(df, .7)
 
     assert isinstance(result, dict)
     assert result['type'] == 'FeatureCollection'
