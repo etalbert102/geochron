@@ -18,7 +18,8 @@ def test_timehex_styledict():
 
     # Call the function with the test dataframe
     result = timehex_styledict(df)
-
+    result_color_list = timehex_styledict(df,opacity=.5 ,cmap = ['blue','yellow'])
+    result_colors = timehex_styledict(df , cmap = LinearColormap(colors=['blue','yellow'], vmin=0, vmax=100))
     # Check that the result is a dictionary
     assert isinstance(result, dict)
 
@@ -29,6 +30,10 @@ def test_timehex_styledict():
         for time_key in result[key]:
             assert 'color' in result[key][time_key]
             assert 'opacity' in result[key][time_key]
+    assert result_color_list['hex1'][1640995200] == {'color': '#0000ffff', 'opacity': 0.5}
+    assert result_colors['hex1'][1640995200] == {'color': '#0202fdff', 'opacity': 0.7}
+
+    
 
 
 def test_h3_to_geojson():
@@ -107,7 +112,7 @@ def test_add_hashmap_properties():
 
     # Call the function with the test inputs
     result = add_hashmap_properties(original_hashmap, time, opacity, cmap)
-
+    result_color_list = add_hashmap_properties(original_hashmap, time, opacity, cmap = ['blue','yellow'])
     # Define the expected result
     expected_result = {
         '89283082837ffff': {
@@ -117,8 +122,17 @@ def test_add_hashmap_properties():
         }
     }
 
+    expected_result_color_list = {
+        '89283082837ffff': {
+            'popup': 'weight= 1<br> center(lat,lon)= ' + str(h3.h3_to_geo('89283082837ffff')),
+            'time': time,
+            'style': {'opacity': opacity, 'color': '#0000ffff'}
+        }
+    }
+
     # Assert that the function output is as expected
     assert result == expected_result
+    assert result_color_list == expected_result_color_list
 
 def test_timehex_timestampedgeojson():
     # Prepare a sample dataframe
