@@ -1,6 +1,6 @@
 """Folium helpers"""
 import json
-from typing import Callable, Optional
+from typing import Callable, Optional, Union
 import h3
 import pandas as pd
 from branca.colormap import LinearColormap
@@ -33,6 +33,9 @@ def timehex_styledict(timehex: pd.DataFrame, opacity= float(.7), cmap:Optional[C
     min_color = min(timehex_long['value'])
     if cmap is None:
         used_cmap = LinearColormap(colors=['blue','red'], vmin=min_color, vmax=max_color)
+    elif isinstance(cmap, list):
+        used_cmap = LinearColormap(colors= cmap, \
+        vmin=min_color, vmax=max_color)
     else:
         used_cmap = cmap
 
@@ -104,14 +107,15 @@ def timehex_backgroundata(timehex: pd.DataFrame):
 
     return backgroundata
 
-def add_hashmap_properties(original_hashmap:dict, time:pd.Timestamp, opacity: float, cmap: Optional[Callable] = None):
+def add_hashmap_properties(original_hashmap:dict, time:pd.Timestamp, opacity: float \
+                            , cmap: Union[Optional[Callable]] = None):
     """
     Adds properties to the hashmap necessary for display.
 
     Args:
         original_hashmap: a hashmap
         time: time of hashmap
-        cmap: a Branca colormap
+        cmap: a Branca colormap or a list of colors 
         opacity: desired opacity of shapes
     Returns:
         a GeoJson FeatureCollection
@@ -131,6 +135,9 @@ def add_hashmap_properties(original_hashmap:dict, time:pd.Timestamp, opacity: fl
     if cmap is None:
         used_cmap = LinearColormap(colors=['blue','red'], \
         vmin= color_min, vmax= color_max)
+    elif isinstance(cmap, list):
+        used_cmap = LinearColormap(colors= cmap, \
+        vmin= color_min, vmax= color_max)
     else:
         used_cmap = cmap
 
@@ -140,7 +147,7 @@ def add_hashmap_properties(original_hashmap:dict, time:pd.Timestamp, opacity: fl
                          'time': time,'style':{'opacity': opacity, 'color': used_cmap(value)}}
     return new_dict
 
-def timehex_timestampedgeojson(timehex: pd.DataFrame, opacity= float(.7), cmap:Optional[Callable] = None):
+def timehex_timestampedgeojson(timehex: pd.DataFrame, opacity= float(.7), cmap: Union[Optional[Callable]] = None):
     """
     Formats a timehex into the correct data format for Folium's timestampedgeojson
 
