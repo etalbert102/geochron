@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 import h3
+import pytest
 from branca.colormap import LinearColormap
 from geochron.visualization.folium import *
 
@@ -99,6 +100,26 @@ def test_timehex_backgroundata():
         assert len(feature["geometry"]["coordinates"]) > 0
         assert feature["id"] in timehex.columns
 
+def test_normalize():
+    # Test case 1: Normalization with min_val = 0 and max_val = 1
+    assert normalize(0.5, 0, 1) == 0.5
+
+    # Test case 2: Normalization with min_val = -1 and max_val = 1
+    assert normalize(0, -1, 1) == 0.5
+
+    # Test case 3: Normalization with min_val = 10 and max_val = 20
+    assert normalize(15, 10, 20) == 0.5
+
+    with pytest.raises(ValueError):
+        normalize(0, 0, 0)
+
+def test_constant_return():
+    # Test case 1: Value doesn't matter; constant should always be returned
+    assert constant_return(42, 5) == 5
+
+    # Test case 2: Another arbitrary value and constant
+    assert constant_return(0, -10) == -10
+
 
 def test_add_hashmap_properties():
     # Define a simple colormap function for testing
@@ -118,7 +139,7 @@ def test_add_hashmap_properties():
         '89283082837ffff': {
             'popup': 'weight= 1<br> center(lat,lon)= ' + str(h3.h3_to_geo('89283082837ffff')),
             'time': time,
-            'style': {'opacity': opacity, 'color': cmap(1)}
+            'style': {'opacity': opacity, 'color': cmap(1), 'fillOpacity': opacity}
         }
     }
 
@@ -126,7 +147,7 @@ def test_add_hashmap_properties():
         '89283082837ffff': {
             'popup': 'weight= 1<br> center(lat,lon)= ' + str(h3.h3_to_geo('89283082837ffff')),
             'time': time,
-            'style': {'opacity': opacity, 'color': '#0000ffff'}
+            'style': {'opacity': opacity, 'color': '#0000ffff', 'fillOpacity': opacity}
         }
     }
 
