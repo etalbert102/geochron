@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 import h3
+import pytest
 from branca.colormap import LinearColormap
 from geochron.visualization.folium import *
 
@@ -108,6 +109,9 @@ def test_normalize():
 
     # Test case 3: Normalization with min_val = 10 and max_val = 20
     assert normalize(15, 10, 20) == 0.5
+
+    with pytest.raises(ValueError):
+        normalize(0, 0, 0)
 
 def test_constant_return():
     # Test case 1: Value doesn't matter; constant should always be returned
