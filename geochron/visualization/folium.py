@@ -1,6 +1,6 @@
 """Folium helpers"""
 import json
-from typing import Callable, Optional, Union
+from typing import Any, Callable, Optional, Union
 import h3
 import pandas as pd
 from branca.colormap import LinearColormap
@@ -107,8 +107,37 @@ def timehex_backgroundata(timehex: pd.DataFrame):
 
     return backgroundata
 
-def add_hashmap_properties(original_hashmap:dict, time:pd.Timestamp, opacity: float \
-                            , cmap: Union[Optional[Callable]] = None):
+def normalize(value: float, min_val: float, max_val: float):
+    """
+    Normalize a value on a scale from 1 to 0 based on a given
+    min and max value.
+
+    Args:
+        value: a value
+        min_val: the minimum value
+        max_val: the maximum value 
+
+    Returns:
+        a scaled value between 1 to 0
+    """
+    if max_val == min_val:
+        raise ValueError("max_val and min_val cannot be equal (division by zero)")
+    scaled_value = (value - min_val) / (max_val - min_val)
+    return scaled_value
+
+def constant_return(value: float, constant: Any):
+    """
+    Returns a constant when fed a value  
+    Args:
+        value: any value
+        constant: any constant
+    Returns:
+        the specified constant 
+    """
+    return constant
+
+def add_hashmap_properties(original_hashmap:dict, time:pd.Timestamp, opacity: Union[float, str] \
+                            , cmap: Union[Optional[Callable], list] = None):
     """
     Adds properties to the hashmap necessary for display.
 
@@ -116,7 +145,8 @@ def add_hashmap_properties(original_hashmap:dict, time:pd.Timestamp, opacity: fl
         original_hashmap: a hashmap
         time: time of hashmap
         cmap: a Branca colormap or a list of colors 
-        opacity: desired opacity of shapes
+        opacity: desired opacity of shapes takes key word gradient
+        to vary opacity based on weight of shape in the time period
     Returns:
         a GeoJson FeatureCollection
     """
@@ -127,11 +157,11 @@ def add_hashmap_properties(original_hashmap:dict, time:pd.Timestamp, opacity: fl
         color_min = 0
         color_max = 0
     else:
-        max_key = max(removed_empty, key=removed_empty.get) # type: ignore[arg-type] 
-        min_key = min(removed_empty, key=removed_empty.get) # type: ignore[arg-type] 
-        color_min = removed_empty[min_key] 
+        max_key = max(removed_empty, key=removed_empty.get) # type: ignore[arg-type]
+        min_key = min(removed_empty, key=removed_empty.get) # type: ignore[arg-type]
+        color_min = removed_empty[min_key]
         color_max = removed_empty[max_key]
-    
+
     if cmap is None:
         used_cmap = LinearColormap(colors=['blue','red'], \
         vmin= color_min, vmax= color_max)
@@ -141,19 +171,28 @@ def add_hashmap_properties(original_hashmap:dict, time:pd.Timestamp, opacity: fl
     else:
         used_cmap = cmap
 
+    if opacity == "gradient":
+        used_opacity = lambda x: normalize(x,min_val = color_min, max_val= color_max)
+    else:
+        used_opacity = lambda x: constant_return(x, constant= opacity)
+
     for key, value in removed_empty.items():
         new_dict[key] = {'popup': 'weight= ' + str(value) +
-                         '<br> center(lat,lon)= ' + str(h3.h3_to_geo(key)), 
-                         'time': time,'style':{'opacity': opacity, 'color': used_cmap(value)}}
+                    '<br> center(lat,lon)= ' + str(h3.h3_to_geo(key)), 
+                    'time': time,'style':{'opacity': used_opacity(value), 'color': used_cmap(value),
+                                               'fillOpacity': used_opacity(value)}}
     return new_dict
 
-def timehex_timestampedgeojson(timehex: pd.DataFrame, opacity= float(.7), cmap: Union[Optional[Callable]] = None):
+def timehex_timestampedgeojson(timehex: pd.DataFrame, opacity: Union[float, str] = .7 \
+                               , cmap: Union[Optional[Callable], list] = None):
     """
     Formats a timehex into the correct data format for Folium's timestampedgeojson
 
     Args:
         timehex: A timehex dataframe
-
+        opacity: desired opacity of shapes takes key word gradient
+        to vary opacity based on weight of shape in the time period
+        cmap: a Branca colormap or a list of colors 
     Returns:
         a GeoJson FeatureCollection
     """
