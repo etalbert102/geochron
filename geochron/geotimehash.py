@@ -2,7 +2,7 @@
 from typing import Callable, List
 from collections import Counter
 from datetime import  datetime, timedelta
-from geostructures.structures import ShapeBase
+from geostructures.typing import GeoShape
 from geostructures.time import TimeInterval
 from geostructures import FeatureCollection, Track
 
@@ -69,7 +69,7 @@ def generate_times(start_time: datetime, end_time: datetime, precision: int):
 
 
 
-def timehash_geoshape(geoshape: ShapeBase, precision: int):
+def timehash_geoshape(geoshape: GeoShape, precision: int):
     """
     Converts a geoshape time into a  list of timehashes of varying precision. 
     A single timepoint produces a list of 1.  
