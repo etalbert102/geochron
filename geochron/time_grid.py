@@ -1,8 +1,8 @@
 "Representation as a time grid"
-from typing import Callable, List
 import math
-import pandas as pd
 from datetime import  datetime, timedelta
+from typing import Callable
+import pandas as pd
 from geostructures.collections import FeatureCollection, Track
 from geochron.time_slicing import get_timestamp_intervals, time_slice_track
 
@@ -39,7 +39,7 @@ def round_down_datetime(dt:datetime, delta:timedelta):
         min_dt = datetime.min
     else:
         min_dt = datetime.min.replace(tzinfo=dt.tzinfo)
-    
+
     remainder = dt - (dt - min_dt) % delta
     return remainder
 
@@ -54,15 +54,16 @@ def extract_intervals_in_range(start_time:datetime, end_time:datetime, interval:
         interval: A timedelta object representing the interval to round down to.
 
     Returns:
-        A list of datetime objects representing the intervals rounded down to the nearest specified interval within the range.
+        A list of datetime objects representing the intervals rounded 
+        down to the nearest specified interval within the range.
     """
     current_time = start_time
     intervals_list = []
-    
+
     while current_time <= end_time:
         intervals_list.append(round_down_datetime(current_time, interval))
         current_time += interval
-    
+
     return intervals_list
 
 def create_time_list_from_datetimes(start_datetime:datetime, end_datetime:datetime, interval:timedelta):
@@ -79,38 +80,44 @@ def create_time_list_from_datetimes(start_datetime:datetime, end_datetime:dateti
     """
     times = []
     current_time = start_datetime
-    
+
     while current_time <= end_datetime:
         times.append(current_time.time())
         current_time += interval
-    
+
     return times
 
 
-def convert_time_grid(track: Track, time_interval: timedelta, time_subinterval: timedelta, hash_func: Callable, integerize=False):
+def convert_time_grid(fcol: FeatureCollection,
+                      time_interval: timedelta,
+                      time_subinterval: timedelta,
+                      hash_func: Callable,
+                      integerize=False):
     """
-    Converts a track into a time grid dataframe, partitioning it by specified time intervals and subintervals.
+    Converts a track into a time grid dataframe,
+    partitioning it by specified time intervals and subintervals.
     
     Args:
         track: The target geostructures Track to be converted.
         time_interval: A timedelta object representing the primary interval to partition the track.
-        time_subinterval: A timedelta object representing the subinterval for detailed slicing within each primary interval.
+        time_subinterval: A timedelta object representing the subinterval.
         hash_func: A callable function used to hash coordinates of track centroids.
-        integerize: A boolean flag indicating whether to convert hashed values to integers (default is False).
+        integerize: A boolean flag indicating whether to convert hashed values to integers.
 
     Returns:
-        A pandas DataFrame representing the time grid with track segments hashed into intervals and subintervals.
+        A pandas DataFrame representing the time grid with track segments hashed into intervals (rows) and subintervals (columns).
     """
     all_tracks = []
+    track = Track(fcol)
     num_intervals = math.ceil(time_interval / time_subinterval)
     columns = [f"Period_{i+1}" for i in range(num_intervals)]
     interval_list = extract_intervals_in_range(track.start, track.end, time_interval)
     track_list = break_time_interval(track, time_interval)
     time_list = create_time_list_from_datetimes(interval_list[0], interval_list[1], time_subinterval)
-    
+
     for tr in track_list:
         interval_tracks = []
-        for i in range(len(time_list) - 1): 
+        for i in range(len(time_list) - 1):
             current_time = time_list[i] 
             next_time = time_list[i + 1]
             subinterval_track = tr.filter_by_time(current_time, next_time)
@@ -124,9 +131,7 @@ def convert_time_grid(track: Track, time_interval: timedelta, time_subinterval: 
             else:
                 interval_tracks.append(0)
         all_tracks.append(interval_tracks)
-    
+
     time_grid = pd.DataFrame(all_tracks, columns=columns)
     time_grid['interval_start'] = interval_list
     return time_grid
-
-
