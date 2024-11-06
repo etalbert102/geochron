@@ -1,13 +1,14 @@
 "Representation as a time grid"
 import math
-from datetime import  datetime, timedelta
-from typing import Callable
+from datetime import  date, datetime, timedelta
+from typing import Callable, List
 import pandas as pd
 from geostructures.collections import FeatureCollection, Track
 from geochron.time_slicing import get_timestamp_intervals, time_slice_track
+from geostructures.time import TimeInterval
 
 
-def break_time_interval(track: Track, time_interval: timedelta):
+def break_time_interval(track: Track, interval_list: List, time_interval: timedelta):
     """
     Breaks a Track into several tracks partitioned by a time interval.
     
@@ -18,10 +19,12 @@ def break_time_interval(track: Track, time_interval: timedelta):
     Returns:
         A list of tracks
     """
-    timestamps = get_timestamp_intervals(track, time_interval)
+    timestamps = interval_list.copy()
+    timestamps.append(interval_list[-1] + time_interval)
     track_list = time_slice_track(track, timestamps)
-
+    del track_list[0]
     return track_list
+
 
 
 def round_down_datetime(dt:datetime, delta:timedelta):
@@ -66,26 +69,58 @@ def extract_intervals_in_range(start_time:datetime, end_time:datetime, interval:
 
     return intervals_list
 
-def create_time_list_from_datetimes(start_datetime:datetime, end_datetime:datetime, interval:timedelta):
+
+def extract_intervals_in_range(start_time: datetime, end_time: datetime, interval: timedelta):
     """
-    Generates a list of time objects from datetime intervals within a specified range.
+    Extracts intervals within a specified range by rounding down to the nearest interval.
     
     Args:
-        start_datetime: A datetime object marking the start of the range.
-        end_datetime: A datetime object marking the end of the range.
+        start_time: A datetime object marking the start of the range.
+        end_time: A datetime object marking the end of the range.
+        interval: A timedelta object representing the interval to round down to.
+
+    Returns:
+        A list of datetime objects representing the intervals rounded 
+        down to the nearest specified interval within the range.
+    """
+    current_time = start_time
+    intervals_list = []
+
+    while current_time <= end_time:
+        intervals_list.append(round_down_datetime(current_time, interval))
+        current_time += interval
+
+    # Add an extra interval to cover the end time if necessary
+    if intervals_list[-1] < end_time:
+        intervals_list.append(round_down_datetime(current_time, interval))
+
+    return intervals_list
+
+
+
+
+def create_time_list_from_datetimes(start_datetime: datetime, num_intervals: int, interval: timedelta):
+    """
+    Generates a list of datetime objects from a given start time, creating a specified number of intervals.
+    
+    Args:
+        start_datetime: A datetime object marking the start time.
+        num_intervals: The number of intervals to create.
         interval: A timedelta object representing the interval between times.
 
     Returns:
-        A list of time objects representing each interval within the range.
+        A list of datetime objects representing each interval.
     """
     times = []
     current_time = start_datetime
 
-    while current_time <= end_datetime:
-        times.append(current_time.time())
+    for _ in range(num_intervals):
+        times.append(current_time)
         current_time += interval
-
+    times[-1] = times[-1]- timedelta(seconds=1)
     return times
+
+
 
 
 def convert_time_grid(fcol: FeatureCollection,
@@ -112,15 +147,15 @@ def convert_time_grid(fcol: FeatureCollection,
     num_intervals = math.ceil(time_interval / time_subinterval)
     columns = [f"Period_{i+1}" for i in range(num_intervals)]
     interval_list = extract_intervals_in_range(track.start, track.end, time_interval)
-    track_list = break_time_interval(track, time_interval)
-    time_list = create_time_list_from_datetimes(interval_list[0], interval_list[1], time_subinterval)
+    track_list = break_time_interval(track,interval_list, time_interval)
 
-    for tr in track_list:
+    for tr, interval in zip(track_list, interval_list):
+        time_list = create_time_list_from_datetimes(interval, num_intervals+1, time_subinterval)
         interval_tracks = []
         for i in range(len(time_list) - 1):
-            current_time = time_list[i] 
-            next_time = time_list[i + 1]
-            subinterval_track = tr.filter_by_time(current_time, next_time)
+            current_time = time_list[i] - timedelta(microseconds=1)
+            next_time = time_list[i + 1] - timedelta(microseconds=1)
+            subinterval_track = tr.filter_by_dt(TimeInterval(current_time,next_time))
             if len(subinterval_track) > 0:
                 point = subinterval_track.centroid
                 hash_value = list(hash_func.hash_coordinates([point]).keys())[0]
