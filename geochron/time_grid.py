@@ -46,30 +46,6 @@ def round_down_datetime(dt:datetime, delta:timedelta):
     remainder = dt - (dt - min_dt) % delta
     return remainder
 
-
-def extract_intervals_in_range(start_time:datetime, end_time:datetime, interval:timedelta):
-    """
-    Extracts intervals within a specified range by rounding down to the nearest interval.
-    
-    Args:
-        start_time: A datetime object marking the start of the range.
-        end_time: A datetime object marking the end of the range.
-        interval: A timedelta object representing the interval to round down to.
-
-    Returns:
-        A list of datetime objects representing the intervals rounded 
-        down to the nearest specified interval within the range.
-    """
-    current_time = start_time
-    intervals_list = []
-
-    while current_time <= end_time:
-        intervals_list.append(round_down_datetime(current_time, interval))
-        current_time += interval
-
-    return intervals_list
-
-
 def extract_intervals_in_range(start_time: datetime, end_time: datetime, interval: timedelta):
     """
     Extracts intervals within a specified range by rounding down to the nearest interval.
