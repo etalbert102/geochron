@@ -119,7 +119,7 @@ def convert_time_grid(fcol: FeatureCollection,
         A pandas DataFrame representing the time grid with track segments hashed into intervals (rows) and subintervals (columns).
     """
     all_tracks = []
-    track = Track(fcol)
+    track = Track(fcol.geoshapes)
     num_intervals = math.ceil(time_interval / time_subinterval)
     columns = [f"Period_{i+1}" for i in range(num_intervals)]
     interval_list = extract_intervals_in_range(track.start, track.end, time_interval)
@@ -134,7 +134,7 @@ def convert_time_grid(fcol: FeatureCollection,
             subinterval_track = tr.filter_by_dt(TimeInterval(current_time,next_time))
             if len(subinterval_track) > 0:
                 point = subinterval_track.centroid
-                hash_value = list(hash_func.hash_coordinates([point]).keys())[0]
+                hash_value = list(hash_func([point]).keys())[0]
                 if integerize:
                     interval_tracks.append(int(hash_value, 16))
                 else:

@@ -98,7 +98,7 @@ def test_convert_time_grid(sample_track):
     time_interval = timedelta(hours=1)
     time_subinterval = timedelta(minutes=30)
     hash_func = MockHashFunc()
-    result = convert_time_grid(sample_track, time_interval, time_subinterval, hash_func)
+    result = convert_time_grid(sample_track, time_interval, time_subinterval, hash_func.hash_coordinates)
 
     # Expected DataFrame structure
     expected_columns = ['Period_1', 'Period_2', 'interval_start']
