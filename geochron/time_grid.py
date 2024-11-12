@@ -112,7 +112,7 @@ def convert_time_grid(fcol: FeatureCollection,
         track: The target geostructures Track to be converted.
         time_interval: A timedelta object representing the primary interval to partition the track.
         time_subinterval: A timedelta object representing the subinterval.
-        hash_func: A callable function used to hash coordinates of track centroids.
+        hash_func: A callable function used to hash coordinates of track centroids. Must use hash_coordinates
         integerize: A boolean flag indicating whether to convert hashed values to integers.
 
     Returns:
