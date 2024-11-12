@@ -5,6 +5,7 @@ from geochron._version import __version__  # noqa: F401
 from geochron.utils.conditional_imports import ConditionalPackageInterceptor
 from geochron.chronnet import convert_chronnet
 from geochron.timehex import convert_timehex
+from geochron.time_grid import convert_time_grid
 from geochron.geotimehash import convert_geotimehash
 from geochron.geosynchnet import convert_geosynchnet
 
@@ -21,5 +22,6 @@ __all__ = [
     'convert_chronnet',
     'convert_timehex',
     'convert_geotimehash',
-    'convert_geosynchnet' 
+    'convert_geosynchnet',
+    'convert_time_grid' 
 ]

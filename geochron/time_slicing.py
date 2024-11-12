@@ -8,7 +8,7 @@ from geostructures.collections import  Track
 def get_timestamp_intervals(track: Track, time_delta: timedelta):
     """
     gets the timestamps for a Track partitioned by a specified length
-    of time in hours  
+    of time   
     
     Args:
         track: the target geostructures Track
@@ -27,9 +27,9 @@ def get_timestamp_intervals(track: Track, time_delta: timedelta):
     while date_x < end_time:
         date_x += time_delta
         timestamps.append(date_x)
-
+    if timestamps:
     # change the last value to be inclusive
-    timestamps[-1] = timestamps[-1] + timedelta(seconds=1)
+        timestamps[-1] = timestamps[-1] + timedelta(seconds=1)
 
 
     return timestamps

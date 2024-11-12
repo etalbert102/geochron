@@ -55,6 +55,11 @@ hash_func= hasher.hash_collection)
 geosynchnet_output = convert_geosynchnet(fcol=Feature_Collection_of_time_shapes, 
 time_delta= dt.timedelta(hours=1), hash_func= hasher.hash_collection)
 
+timegrid_output = convert_time_grid(fcol=Feature_Collection_of_time_shapes, 
+time_interval: dt.timedelta(days=1), time_subinterval dt.timedelta(hours=1), 
+hash_func= hasher.hash_coordinates, integerize=False)
+
+
 ```
 Geochron also provides helper functions for visualization using popular libraries like Folium and Pydeck. These helpers 
 arlocated in geochron.visualizations
