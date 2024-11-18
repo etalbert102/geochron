@@ -1,5 +1,5 @@
 import pytest
-import math
+import pandas as pd
 from datetime import datetime, timedelta
 
 from geostructures import Coordinate, GeoPoint
@@ -47,6 +47,7 @@ def test_round_down_datetime():
         (datetime(2023, 1, 1, 8, 45), timedelta(minutes=30), datetime(2023, 1, 1, 8, 30)),
         (datetime(2023, 1, 1, 8, 0, tzinfo=None), timedelta(hours=1), datetime(2023, 1, 1, 8, 0)),
         (datetime(2023, 1, 1, 8, 0), timedelta(days=1), datetime(2023, 1, 1, 0, 0)),
+        (pd.Timestamp(datetime(2023, 1, 1, 8, 0)), timedelta(days=1), datetime(2023, 1, 1, 0, 0))
     ]
     
     for dt, delta, expected in test_cases:
