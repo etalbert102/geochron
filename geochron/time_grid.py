@@ -38,6 +38,8 @@ def round_down_datetime(dt:datetime, delta:timedelta):
     Returns:
         A datetime object rounded down to the nearest interval of the specified timedelta.
     """
+    if isinstance(dt, pd.Timestamp):
+        dt = dt.to_pydatetime()
     if dt.tzinfo is None:
         min_dt = datetime.min
     else:
